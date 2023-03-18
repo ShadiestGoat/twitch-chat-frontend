@@ -11,23 +11,18 @@
     export let content:string
     export let emotes: emote[]
 
-    type replace = {
-        start: number
-        end: number
-        repl: string
-    }
-
+    type retVal = Partial<{md: string, src: string}>
+    
     // parsedInfo[]
-    function parseContent(content:string):string {
-        let parsed = ""
-        // [] as parsedInfo[]
+    function parseContent(content:string): string {
+        const parsed = [] as retVal[]
     
         const p = emotes.map(e => {          
             return e.positions.map(p => {
                 return {
                     start: p[0],
                     end: p[1],
-                    repl: `![](${e.url})`
+                    repl: e.url
                 }
             })
         }).flat().sort((a, b) => a.start - b.start)
@@ -35,19 +30,27 @@
         let lastI = 0
 
         p.forEach(v => {
-            parsed += content.slice(lastI, v.start).trim() + v.repl
+            parsed.push({md: content.slice(lastI, v.start).trim()})
+            parsed.push({src: v.repl})
             lastI = v.end + 1
         })
+        parsed.push({md: content.slice(lastI).trim()})
 
-        parsed += content.slice(lastI).trim()
-
-        return parsed
+        return parsed.map(v => {
+            let r = ""
+            if (v.src) {
+                r = `![](${v.src})`
+            } else {
+                r = v.md?.replaceAll(/!\[.*?\]\(.*?\)/g, "*(no image, sadge)*") ?? ""
+            }
+            return r
+        }).join(" ")
     }
 
     $: parsed = parseContent(content)
 </script>
 
-<SvelteMarkdown 
+<SvelteMarkdown
     options={{
         async: true,
     }}
@@ -57,11 +60,11 @@
         code: Empty,
         list: Empty,
         listitem: Empty,
+        image: Image,
         
         codespan: Code,
         del: Strikethrough,
         strong: Bold,
-        image: Image,
         text: Paragraph,
     }}
     source={parsed}
