@@ -14,7 +14,7 @@
     type retVal = Partial<{md: string, src: string}>
     
     // parsedInfo[]
-    function parseContent(content:string): string {
+    function parseContent(content:string): retVal[] {
         const parsed = [] as retVal[]
     
         const p = emotes.map(e => {          
@@ -37,36 +37,42 @@
         parsed.push({md: content.slice(lastI).trim()})
 
         return parsed.map(v => {
-            let r = ""
             if (v.src) {
-                r = `![](${v.src})`
-            } else {
-                r = v.md?.replaceAll(/!\[.*?\]\(.*?\)/g, "*(no image, sadge)*") ?? ""
+                return v
             }
-            return r
-        }).join(" ")
+            v.md = v.md?.replaceAll(/!\[.*?\]\(.*?\)/g, "*(no image, sadge)*") ?? ""
+
+            return v
+        })
     }
 
     $: parsed = parseContent(content)
 </script>
 
-<SvelteMarkdown
-    options={{
-        async: true,
-    }}
-    renderers={{
-        heading: Empty,
-        table: Empty,
-        code: Empty,
-        list: Empty,
-        listitem: Empty,
-        image: Image,
-        
-        codespan: Code,
-        del: Strikethrough,
-        strong: Bold,
-        text: Paragraph,
-    }}
-    source={parsed}
-    isInline
-/>
+{#each parsed as p}
+    {#if p.src}
+        <Image href={p.src} />
+    {:else}
+        <SvelteMarkdown
+            options={{
+                async: true,
+            }}
+            renderers={{
+                heading: Empty,
+                table: Empty,
+                code: Empty,
+                list: Empty,
+                listitem: Empty,
+                image: Empty,
+                
+                codespan: Code,
+                del: Strikethrough,
+                strong: Bold,
+                text: Paragraph,
+            }}
+            source={p.md}
+            isInline
+        />
+    {/if}
+{/each}
+
