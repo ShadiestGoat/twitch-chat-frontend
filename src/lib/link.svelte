@@ -1,7 +1,7 @@
 <script lang="ts">
 	import Paragraph from "./paragraph.svelte";
 
-
+    export let raw = ""
     export let href = ''
     export let title: string | undefined = undefined
 </script>
@@ -10,6 +10,6 @@
     <a {href} {title}><slot></slot></a>
 {:else}
     <Paragraph>
-        {title ?? href}
+        {raw}
     </Paragraph>
 {/if}
