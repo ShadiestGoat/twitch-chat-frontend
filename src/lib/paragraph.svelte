@@ -1,5 +1,5 @@
 <!-- <span> -->
-    <slot />
+<slot />
 <!-- </span> -->
 
 <!-- <style lang="scss">

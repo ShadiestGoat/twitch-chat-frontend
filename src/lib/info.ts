@@ -11,6 +11,22 @@ export type emote = {
     positions: [number, number][]
 }
 
+export type mdNode = {
+    type:   "text" |
+            "bold" |
+            "ital" |
+            "link" |
+            "code" |
+            "strike" |
+            "emote"
+} & ({
+    content: string,
+    children: undefined,
+} | {
+    content: undefined,
+    children: mdNode[],
+})
+
 export type message = {
     id:      string,
     author:  author,
