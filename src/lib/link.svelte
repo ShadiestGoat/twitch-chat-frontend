@@ -1,7 +1,7 @@
 <script lang="ts">
-    export let href:string;
+    export let info:string;
 </script>
 
-<a {href} target="_blank" rel="noreferrer">
+<a href={info} target="_blank" rel="noreferrer">
     <slot />
 </a>

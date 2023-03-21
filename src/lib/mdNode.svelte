@@ -42,7 +42,7 @@
     }
 </script>
 
-<svelte:component this={e} href={c.content}>
+<svelte:component this={e} info={c.content}>
     {#if c.content}
         {c.content}
     {:else}
