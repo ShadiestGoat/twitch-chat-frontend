@@ -10,8 +10,6 @@
 
     let messages = [] as message[]
 
-    const fixMsg = /\s{2,}/g
-
     onMount(async () => {
         const ws = new WebSocket(`ws${PUBLIC_SECURE == "false" ? "" : "s"}://${PUBLIC_BASE}/ws`)
         ws.onopen = function () {
@@ -26,17 +24,9 @@
                     ws.send("P")
                     return
                 case "MESSAGES":
-                    messages = (m.data as message[]).filter(v => v.content[0] != "$").map(v => {
-                        v.content = v.content.replaceAll(fixMsg, " ")
-                        return v
-                    })
                     break
                 case "MESSAGE":
                     const msg = m.data as message
-                    if (msg.content[0] == "$") {
-                        return
-                    }
-                    msg.content = msg.content.replaceAll(fixMsg, " ")
                     
                     messages.push(msg)
                     messages = messages
@@ -63,12 +53,12 @@
                     <div class="reply" style="--c: #{msg.reply.author.color}">
                         <p>
                             <span style="color: #{msg.reply.author.color}" class="reply-author">{msg.reply.author.name}:</span>
-                            <Message content={msg.reply.content} emotes={msg.emotes ?? []} />
+                            <Message content={msg.reply.content} />
                         </p>
                     </div>
                 {/if}
                 <p>
-                    <Message content={msg.content} emotes={msg.emotes ?? []} />
+                    <Message content={msg.content} />
                 </p>
             </div>
         </div>

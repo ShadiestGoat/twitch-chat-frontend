@@ -5,12 +5,6 @@ export type author = {
     pronouns: string,
 }
 
-export type emote = {
-    url: string,
-    /** [start, end], end is non inclusive. These are indexes */
-    positions: [number, number][]
-}
-
 export type mdNode = {
     type:   "text" |
             "bold" |
@@ -30,9 +24,8 @@ export type mdNode = {
 export type message = {
     id:      string,
     author:  author,
-    content: string,
+    content: mdNode[],
     time:    string,
-    emotes:  emote[],
     bits:    number,
     action:  boolean,
     reply?:  message,
