@@ -7,6 +7,7 @@
 	import Code from "./code.svelte";
 	import Image from "./image.svelte";
 	import Paragraph from "./paragraph.svelte";
+	import Link from "./link.svelte";
 
     export let content:string
     export let emotes: emote[]
@@ -56,6 +57,8 @@
         <SvelteMarkdown
             options={{
                 async: true,
+                smartypants: true,
+                gfm: true,
             }}
             renderers={{
                 heading: Empty,
@@ -65,6 +68,7 @@
                 listitem: Empty,
                 image: Empty,
                 html: Empty,
+                link: Link,
                 
                 codespan: Code,
                 del: Strikethrough,
