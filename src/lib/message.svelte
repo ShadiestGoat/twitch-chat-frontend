@@ -64,6 +64,7 @@
                 list: Empty,
                 listitem: Empty,
                 image: Empty,
+                html: Empty,
                 
                 codespan: Code,
                 del: Strikethrough,
