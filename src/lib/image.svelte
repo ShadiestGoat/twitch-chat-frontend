@@ -1,9 +1,11 @@
 <script lang="ts">
-    export let info = ''
+    export let href = ''
+    export let title:undefined | string = undefined
+    export let text = ''
 </script>
 
 <span>
-    <img src={info} alt="emote">
+    <img src={href} {title} alt={text}>
 </span>
 
 <style lang="scss">
